@@ -4,4 +4,5 @@ In it, the capability of LTE to support a fast state estimation branch current a
 
 In the `Matlab` directory you can find the evaluation scripts used in this work.
 
-In the `ns-3-dev-repo` you can find the slghty altered and extended simulation library used in this work as well as the simulation results used for plots in the paper.
+In the `ns-3-dev-repo` you can find a patch for the ns-3-dev branch used in this work as well as the simulation results used for plots in the paper.
+Please use the version [3.31](https://www.nsnam.org/releases/ns-3-31/) of ns-3 together with the provided patch to recreate the simulation.
