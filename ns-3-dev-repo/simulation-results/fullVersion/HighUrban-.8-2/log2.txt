@@ -1,0 +1,5 @@
+Waf: Entering directory `/home/leonard/leonardfisser_fast-state-estimation-lte_code/ns-3-dev/build'
+Waf: Leaving directory `/home/leonard/leonardfisser_fast-state-estimation-lte_code/ns-3-dev/build'
+Build commands will be stored in build/compile_commands.json
+'build' finished successfully (1.646s)
+Urban

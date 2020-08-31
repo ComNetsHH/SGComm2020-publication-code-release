@@ -1,0 +1,63 @@
+#!/bin/bash
+./waf configure --build-profile=optimized --enable-examples
+./waf
+
+### Configure
+numRuns=1
+# 100 = 2100 MHz, 9895 = 450 MHz
+DlEarfcn=9895
+IntervalSteps=0.1
+IntervalStart=0.0
+IntervalNumbs=20
+
+### Urban
+fileNamePre="LowUrban"
+Scenario="Urban"
+for interval in $(seq 1 $((IntervalNumbs)))
+do
+    intervalTime=$(bc <<< "scale=3;$IntervalSteps*$interval+$IntervalStart")
+    echo $intervalTime
+    fileName="$fileNamePre-$intervalTime-"
+    # Start bulk
+    for index in $(seq 1 $(($numRuns-1)))
+    do
+        echo Run $index
+        mkdir -p "simulation-results/$fileName$index"
+        ./waf --cwd=simulation-results/$fileName$index --command-template="%s --runID=$index --RngRun=$index --numNodes=1400 --DlEarfcn=$DlEarfcn --RlcMode=2 --Scenario=$Scenario --Interval=$intervalTime" --run scratch/simulation-model/simulation-model > simulation-results/$fileName$index/log$index.txt 2>&1 &
+        sleep 3s
+    done
+    # Start last run in non parallel
+    echo Run $numRuns
+    mkdir -p "simulation-results/$fileName$numRuns"
+    ./waf --cwd=simulation-results/$fileName$numRuns --command-template="%s --runID=$numRuns --RngRun=$numRuns --numNodes=1400 --DlEarfcn=$DlEarfcn --RlcMode=2 --Scenario=$Scenario --Interval=$intervalTime" --run scratch/simulation-model/simulation-model > simulation-results/$fileName$numRuns/log$numRuns.txt 2>&1 &
+    sleep 3s
+done
+
+# Wait for all simulations to terminate # MAY BREAK ON YOUR SYSTEM BE CAREFULL
+#while pgrep -u USER simulation-mode > /dev/null; do sleep 1; done
+
+### Rural
+fileNamePre="LowRural"
+Scenario="Rural"
+for interval in $(seq 1 $((IntervalNumbs)))
+do
+    intervalTime=$(bc <<< "scale=3;$IntervalSteps*$interval+$IntervalStart")
+    echo $intervalTime
+    fileName="$fileNamePre-$intervalTime-"
+    # Start bulk
+    for index in $(seq 1 $(($numRuns-1)))
+    do
+        echo Run $index
+        mkdir -p "simulation-results/$fileName$index"
+        ./waf --cwd=simulation-results/$fileName$index --command-template="%s --runID=$index --RngRun=$index --numNodes=1400 --DlEarfcn=$DlEarfcn --RlcMode=2 --Scenario=$Scenario --Interval=$intervalTime" --run scratch/simulation-model/simulation-model > simulation-results/$fileName$index/log$index.txt 2>&1 &
+        sleep 3s
+    done
+    # Start last run in non parallel
+    echo Run $numRuns
+    mkdir -p "simulation-results/$fileName$numRuns"
+    ./waf --cwd=simulation-results/$fileName$numRuns --command-template="%s --runID=$numRuns --RngRun=$numRuns --numNodes=1400 --DlEarfcn=$DlEarfcn --RlcMode=2 --Scenario=$Scenario --Interval=$intervalTime" --run scratch/simulation-model/simulation-model > simulation-results/$fileName$numRuns/log$numRuns.txt 2>&1 &
+    sleep 3s
+done
+
+# Wait for all simulations to terminate # MAY BREAK ON YOUR SYSTEM BE CAREFULL
+#while pgrep -u USER simulation-mode > /dev/null; do sleep 1; done
